@@ -70,19 +70,7 @@ class OverlayService : Service() {
         isInitialized = true
         
         // Heavy initializations deferred here
-        withContext(Dispatchers.IO) {
-            try {
-                graphifyRepo.getRecentTasks(10)
-            } catch (e: Exception) {
-                // Graphify initialization
-            }
-        }
         
-        try {
-            voiceManager.initialize()
-        } catch (e: Exception) {
-            // Voice initialization
-        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

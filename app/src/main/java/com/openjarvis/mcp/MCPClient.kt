@@ -3,6 +3,7 @@ package com.openjarvis.mcp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Request
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -37,7 +38,7 @@ class MCPClient(
             
             val builder = Request.Builder()
                 .url(server.url)
-                .post(requestBody.toRequestBody(okhttp3.MediaType.get("application/json")))
+                .post(requestBody.toRequestBody("application/json".toMediaType()))
             server.apiKey?.takeIf { it.isNotBlank() }?.let { builder.header("Authorization", "Bearer $it") }
             val request = builder.build()
             
@@ -77,7 +78,7 @@ class MCPClient(
             
             val builder = Request.Builder()
                 .url(server.url)
-                .post(requestBody.toRequestBody(okhttp3.MediaType.get("application/json")))
+                .post(requestBody.toRequestBody("application/json".toMediaType()))
             server.apiKey?.takeIf { it.isNotBlank() }?.let { builder.header("Authorization", "Bearer $it") }
             val request = builder.build()
             
@@ -123,7 +124,7 @@ class MCPClient(
             
             val builder = Request.Builder()
                 .url(server.url)
-                .post(requestBody.toRequestBody(okhttp3.MediaType.get("application/json")))
+                .post(requestBody.toRequestBody("application/json".toMediaType()))
             server.apiKey?.takeIf { it.isNotBlank() }?.let { builder.header("Authorization", "Bearer $it") }
             val request = builder.build()
             

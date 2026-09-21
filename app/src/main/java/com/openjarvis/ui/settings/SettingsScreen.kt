@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -35,6 +36,7 @@ import com.openjarvis.llm.UniversalAdapter
 import com.openjarvis.voice.VoiceManager
 import com.openjarvis.voice.STTMode
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import com.openjarvis.ui.theme.VoidColor
 
 @Composable
@@ -588,7 +590,7 @@ fun FloatingLabelTextField(
                     color = VoidColor.TextSecondary
                 ),
                 modifier = Modifier.graphicsLayer {
-                    translationY = labelOffset.dp.toPx()
+                    translationY = with(LocalDensity.current) { labelOffset.dp.toPx() }
                     scaleX = labelScale
                     scaleY = labelScale
                 }
