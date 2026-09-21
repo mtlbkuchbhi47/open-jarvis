@@ -39,7 +39,7 @@ interface AutomationDao {
     suspend fun delete(id: String)
 }
 
-@Database(entities = [AutomationEntity::class], version = 1)
+@Database(entities = [AutomationEntity::class], version = 1, exportSchema = false)
 abstract class AutomationDB : RoomDatabase() {
     abstract fun automationDao(): AutomationDao
     
