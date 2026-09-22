@@ -305,6 +305,7 @@ private fun ProviderCard(name: String, subtitle: String, modifier: Modifier = Mo
 private fun TryItScreen(onBack: () -> Unit, onSuccess: () -> Unit) {
     var command by remember { mutableStateOf("Open Chrome and search for weather") }
     var isRunning by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
     
     Column(
         modifier = Modifier.fillMaxSize()

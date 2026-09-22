@@ -64,13 +64,6 @@ class JarvisNotificationListener : NotificationListenerService() {
         val parsed = parseNotification(sbn)
         notifications.add(parsed)
         
-        scope.launch {
-            try {
-                graphifyRepo?.logNotification(
-                    "${parsed.packageName}: ${parsed.title}"
-                )
-            } catch (e: Exception) { }
-        }
     }
     
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
@@ -92,9 +85,7 @@ class JarvisNotificationListener : NotificationListenerService() {
         
         val isMessaging = sbn.packageName in messagingApps
         
-        val sender = if (isMessaging) {
-            extras.getCharSequence(Notification.EXTRA_SENDER_TEXT)?.toString()
-        } else null
+        val sender = if (isMessaging) title else null
         
         return JarvisNotification(
             id = sbn.id,

@@ -78,55 +78,46 @@ class AutomationManager(private val context: Context) {
             "automation_command" to automation.command
         )
         
-        val request = when (val schedule = automation.schedule) {
+        when (val schedule = automation.schedule) {
             is AutomationSchedule.Daily -> {
-                PeriodicWorkRequestBuilder<AutomationWorker>(
-                    24, TimeUnit.HOURS,
-                    15, TimeUnit.MINUTES
-                )
+                val request = PeriodicWorkRequestBuilder<AutomationWorker>(24, TimeUnit.HOURS, 15, TimeUnit.MINUTES)
                     .setConstraints(constraints)
                     .setInputData(inputData)
                     .setInitialDelay(calculateDelay(schedule.hour, schedule.minute), TimeUnit.MILLISECONDS)
                     .addTag(automation.id)
                     .build()
+                WorkManager.getInstance(context).enqueueUniquePeriodicWork(automation.id, ExistingPeriodicWorkPolicy.REPLACE, request)
             }
             is AutomationSchedule.Weekly -> {
-                PeriodicWorkRequestBuilder<AutomationWorker>(
-                    7, TimeUnit.DAYS,
-                    15, TimeUnit.MINUTES
-                )
+                val request = PeriodicWorkRequestBuilder<AutomationWorker>(7, TimeUnit.DAYS, 15, TimeUnit.MINUTES)
                     .setConstraints(constraints)
                     .setInputData(inputData)
                     .setInitialDelay(calculateWeeklyDelay(schedule.dayOfWeek, schedule.hour, schedule.minute), TimeUnit.MILLISECONDS)
                     .addTag(automation.id)
                     .build()
+                WorkManager.getInstance(context).enqueueUniquePeriodicWork(automation.id, ExistingPeriodicWorkPolicy.REPLACE, request)
             }
             is AutomationSchedule.Interval -> {
                 val safeInterval = maxOf(schedule.intervalMs, TimeUnit.MINUTES.toMillis(15))
-                PeriodicWorkRequestBuilder<AutomationWorker>(
-                    safeInterval, TimeUnit.MILLISECONDS,
-                    1, TimeUnit.MINUTES
-                )
+                val request = PeriodicWorkRequestBuilder<AutomationWorker>(safeInterval, TimeUnit.MILLISECONDS, 1, TimeUnit.MINUTES)
                     .setConstraints(constraints)
                     .setInputData(inputData)
                     .addTag(automation.id)
                     .build()
+                WorkManager.getInstance(context).enqueueUniquePeriodicWork(automation.id, ExistingPeriodicWorkPolicy.REPLACE, request)
             }
             is AutomationSchedule.Once -> {
                 val delay = schedule.atMs - System.currentTimeMillis()
                 if (delay <= 0) return
-                
-                OneTimeWorkRequestBuilder<AutomationWorker>()
+                val request = OneTimeWorkRequestBuilder<AutomationWorker>()
                     .setConstraints(constraints)
                     .setInputData(inputData)
                     .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                     .addTag(automation.id)
                     .build()
+                WorkManager.getInstance(context).enqueueUniqueWork(automation.id, ExistingWorkPolicy.REPLACE, request)
             }
         }
-        
-        WorkManager.getInstance(context)
-            .enqueueUniqueWork(automation.id, ExistingWorkPolicy.REPLACE, request)
     }
     
     private fun cancelAutomation(id: String) {

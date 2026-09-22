@@ -22,7 +22,7 @@ class JarvisAccessibilityService : AccessibilityService() {
         super.onServiceConnected()
         instance = this
         val info = AccessibilityServiceInfo().apply {
-            eventTypes = AccessibilityEvent.TYPE_ALL_MASK
+            eventTypes = AccessibilityEvent.TYPES_ALL_MASK
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
             flags = AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS or
                     AccessibilityServiceInfo.FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY or
@@ -162,7 +162,7 @@ class JarvisAccessibilityService : AccessibilityService() {
     suspend fun captureScreenshot(): android.graphics.Bitmap? {
         if (android.os.Build.VERSION.SDK_INT < 30) return null
         return suspendCancellableCoroutine { cont ->
-            takeScreenshot(DISPLAY_ID, mainExecutor, object : TakeScreenshotCallback() {
+            takeScreenshot(DISPLAY_ID, mainExecutor, object : TakeScreenshotCallback {
                 override fun onSuccess(result: ScreenshotResult) {
                     val hardware = result.hardwareBuffer
                     val colorSpace = result.colorSpace

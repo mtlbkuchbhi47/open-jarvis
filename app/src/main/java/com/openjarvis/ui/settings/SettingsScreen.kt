@@ -11,8 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.*
@@ -364,7 +364,7 @@ private fun SettingsHeader(onNavigateBack: () -> Unit) {
     ) {
         IconButton(onClick = onNavigateBack) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                imageVector = Icons.Default.KeyboardArrowLeft,
                 contentDescription = "Back",
                 tint = VoidColor.TextSecondary
             )
@@ -452,7 +452,7 @@ private fun ProviderSelectorCard(
             )
             
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = null,
                 tint = VoidColor.TextDisabled,
                 modifier = Modifier.graphicsLayer(rotationZ = rotationAngle)
@@ -552,6 +552,8 @@ fun FloatingLabelTextField(
     visible: Boolean = true,
     onTogglePassword: (() -> Unit)? = null
 ) {
+    var showPassword by remember { mutableStateOf(false) }
+    val density = LocalDensity.current
     val labelOffset by animateFloatAsState(
         targetValue = if (isFocused || value.isNotEmpty()) -20f else 0f,
         animationSpec = spring(stiffness = 300f, dampingRatio = 0.75f),
@@ -590,7 +592,7 @@ fun FloatingLabelTextField(
                     color = VoidColor.TextSecondary
                 ),
                 modifier = Modifier.graphicsLayer {
-                    translationY = with(LocalDensity.current) { labelOffset.dp.toPx() }
+                    translationY = with(density) { labelOffset.dp.toPx() }
                     scaleX = labelScale
                     scaleY = labelScale
                 }
@@ -810,7 +812,7 @@ private fun PermissionRow(
             }
             
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = null,
                 tint = VoidColor.Red
             )

@@ -10,7 +10,7 @@ class SelfHealingExecutor(private val context: Context) {
     
     private val screenReader = ScreenReader(context)
     private val graphifyRepo = GraphifyRepository(context)
-    private val llm = UniversalAdapter.getModelManager(context)
+    private val llm = UniversalAdapter(context)
     
     private val maxAttempts = 3
     private val baseDelayMs = 1000L
@@ -23,7 +23,7 @@ class SelfHealingExecutor(private val context: Context) {
         
         val result = tryExecuteAction(action, context)
         
-        if (result.success) return result
+        if (result is ActionResult.Success) return result
         
         if (attempt >= maxAttempts) {
             return ActionResult.Failed("Could not complete after $maxAttempts attempts")
@@ -42,7 +42,7 @@ class SelfHealingExecutor(private val context: Context) {
         delay(baseDelayMs * attempt)
         
         if (alternativeResponse != null) {
-            val alternativeAction = parseActionFromLLM(alternativeResponse)
+            val alternativeAction = alternativeResponse.getOrNull()?.let { parseActionFromLLM(it) }
             if (alternativeAction != null) {
                 return executeWithHealing(alternativeAction, context, attempt + 1)
             }

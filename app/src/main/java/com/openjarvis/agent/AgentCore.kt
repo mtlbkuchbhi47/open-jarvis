@@ -190,7 +190,7 @@ fun executeTask(cleanCommand: String): Job {
                         val executed = executeActions(actions)
                         if (!executed) {
                             graphifyRepo.logTask(
-                                cleanCommand = cleanCommand,
+                                command = cleanCommand,
                                 result = "failed: action execution",
                                 provider = universalAdapter.getProviderName(),
                                 latencyMs = latency
@@ -199,7 +199,7 @@ fun executeTask(cleanCommand: String): Job {
                         }
                         
                         graphifyRepo.logTask(
-                            cleanCommand = cleanCommand,
+                            command = cleanCommand,
                             result = "success",
                             provider = universalAdapter.getProviderName(),
                             latencyMs = latency
@@ -226,6 +226,7 @@ fun executeTask(cleanCommand: String): Job {
                 graphifyRepo.logTask(cleanCommand, "failed: ${e.message}", "", 0)
             }
         }
+    }
     }
 
     suspend fun testConnection(): Result<Long> {
