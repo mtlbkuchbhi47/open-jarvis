@@ -435,4 +435,3 @@ fun executeTask(cleanCommand: String): Job {
         return null
     }
 }
-}
